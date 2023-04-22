@@ -12,13 +12,23 @@ class Cliente extends Model {
 
     protected $hidden = [
         'password',
+        'created_at',
+        'updated_at'
     ];
 
     public function settori() {
-        return $this->hasMany(Settore::class, 'clienti_settori_pivot');
+        return $this->hasManyThrough(
+            Settore::class,
+            ClienteSettoriPivot::class,
+            'clienti_id',
+            'id',
+        );
 
     }
     public function tipo() {
-        return $this->hasMany(Tipo::class, 'clienti_tipi_pivot');
+        return $this->hasOne(
+            Tipo::class , 'id', 'tipi_id')
+            ;
+
     }
 }

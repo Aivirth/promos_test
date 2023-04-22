@@ -23,6 +23,7 @@ class ClientiSeeder extends Seeder {
             'indirizzo'       => 'Via lorem 141, pt',
             'inizio_attivita' => '1920-01-15',
             'password'        => Hash::make('1234'),
+            'tipi_id'         => 1,
             'note'            => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis elementum tortor a erat tristique auctor. Integer venenatis id dui ac accumsan. Nulla facilisi. Ut in mi vitae nibh imperdiet congue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus rhoncus sed sem at rutrum. Curabitur hendrerit sapien sed nunc maximus aliquam. Proin placerat malesuada leo, sit amet consequat ipsum euismod a. Donec cursus dolor eget dolor consectetur mollis. Donec convallis dignissim imperdiet.',
         ]);
 
@@ -35,7 +36,8 @@ class ClientiSeeder extends Seeder {
             'cf'              => 'PXTNSF53T24L626Y ',
             'indirizzo'       => 'Via Ipsum 147, pz',
             'inizio_attivita' => '2020-06-15',
-            'password'        => Hash::make('4321')
+            'tipi_id'         => 2,
+            'password'        => Hash::make('4321'),
         ]);
     }
 }
