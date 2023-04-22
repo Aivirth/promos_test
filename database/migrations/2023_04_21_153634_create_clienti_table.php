@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->date('inizio_attivita');
             $table->string('attach_visura_camerale')->nullable();
             $table->string('password');
+            $table->text('note')->nullable();
 
             $table->timestamps();
         });
