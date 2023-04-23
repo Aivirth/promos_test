@@ -40,6 +40,8 @@ class Cliente extends Model {
             ClienteSettoriPivot::class,
             'clienti_id',
             'id',
+            'id',
+            'settori_id'
         );
 
     }

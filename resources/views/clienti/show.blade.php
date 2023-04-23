@@ -1,5 +1,5 @@
 <x-dashboard>
-    {{-- @dd($cliente) --}}
+    {{-- @dd($cliente['settori']) --}}
     <div class="container px-5 my-5">
         <div class="row my-5">
             <h3 class="col col-8 fs-4 mb-4">Scheda Cliente: </h3>

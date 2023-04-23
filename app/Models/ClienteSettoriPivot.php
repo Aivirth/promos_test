@@ -17,4 +17,8 @@ class ClienteSettoriPivot extends Pivot
         'clienti_id',
         'settori_id'
     ];
+
+    // public function clienti(){
+    //     return $this->belongsToMany(Cliente::class);
+    // }
 }

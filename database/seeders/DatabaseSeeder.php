@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             SettoriSeeder::class,
             TipiSeeder::class,
             ClientiSeeder::class,
+            ClientiSettoriPivotSeeder::class
         ]);
     }
 }

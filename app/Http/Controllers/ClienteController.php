@@ -120,7 +120,8 @@ class ClienteController extends Controller {
         }
 
         //Create cliente - settore relationship
-        ClienteSettoriPivot::insert($selectedSettori);
+        $clienteSettoriPivot = ClienteSettoriPivot::insert($selectedSettori);
+
 
         return redirect()->route('dashboard.home')->with('message', 'Utente creato con successo');
     }
@@ -129,6 +130,7 @@ class ClienteController extends Controller {
      * Display the specified resource.
      */
     public function show(string $id) {
+
 
         $cliente = Cliente::where('id', '=', $id)->with(['tipo', 'settori'])->get()->toArray()[0];
 
