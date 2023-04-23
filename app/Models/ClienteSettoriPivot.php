@@ -13,7 +13,8 @@ class ClienteSettoriPivot extends Pivot
 
     protected $table = 'clienti_settori_pivot';
 
-    // public function clienti(){
-    //     return $this->belongs
-    // }
+    protected $fillable = [
+        'clienti_id',
+        'settori_id'
+    ];
 }

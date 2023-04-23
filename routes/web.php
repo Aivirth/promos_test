@@ -18,4 +18,7 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/', [ClienteController::class, 'index']);
+Route::get('/', [ClienteController::class, 'index'])->name('dashboard.home');
+
+Route::get('/cliente/create', [ClienteController::class, 'create'])->name('crea_utente');
+Route::post('/cliente', [ClienteController::class, 'store'])->name('store_cliente');

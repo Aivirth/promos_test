@@ -22,6 +22,9 @@ return new class extends Migration {
             $table->date('inizio_attivita');
             $table->string('attach_visura_camerale')->nullable();
             $table->string('password');
+            $table->timestamp('email_verified_at')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->rememberToken();
 
             $table->unsignedBigInteger('tipi_id')->nullable();
             $table->foreign('tipi_id')->references('id')->on('tipi')->onDelete('SET NULL');

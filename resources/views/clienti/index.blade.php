@@ -1,7 +1,13 @@
-{{-- @dd($clienti[0]) --}}
+{{-- @dd($clienti) --}}
 <x-dashboard>
     <div class="row my-5">
-        <h3 class="fs-4 mb-3">Lista clienti</h3>
+        <div class="col col-12">
+            <x-flash-message-success />
+        </div>
+        <h3 class="col col-8 fs-4 mb-4">Lista clienti</h3>
+        <div class="col col-4 mb-4">
+            <a href="{{ route('crea_utente') }}" class="btn btn-success " tabindex="-1" role="button" >Aggiungi nuovo cliente</a>
+        </div>
         <div class="col">
             <table class="table bg-white rounded shadow-sm  table-hover">
                 <thead>
@@ -18,6 +24,7 @@
                     @unless (count($clienti) == 0)
 
                         @foreach ($clienti as $cliente)
+                        {{-- @dd($cliente['id']) --}}
                             <tr>
                                 <th scope="row">{{ $cliente['id'] }}</th>
                                 <td>{{ $cliente['ragione_sociale'] }}</td>
