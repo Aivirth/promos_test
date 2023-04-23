@@ -129,7 +129,16 @@ class ClienteController extends Controller {
      * Display the specified resource.
      */
     public function show(string $id) {
-        //
+
+        $cliente = Cliente::where('id', '=', $id)->with(['tipo', 'settori'])->get()->toArray()[0];
+
+        if ($cliente) {
+            return view('clienti.show', [
+                'cliente' => $cliente,
+            ]);
+        } else {
+            abort('404');
+        }
     }
 
     /**
