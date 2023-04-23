@@ -30,14 +30,13 @@
             </div>
             <div class="mb-3">
                 <label class="form-label d-block">Tipo</label>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="business" type="radio" name="tipo" value="1" />
-                    <label class="form-check-label" for="business">Business</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="privato" type="radio" name="tipo" value="2" />
-                    <label class="form-check-label" for="privato">Privato</label>
-                </div>
+                @foreach ($tipi as $tipo)
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" id="{{ $tipo['nome'] }}" type="radio" name="tipo"
+                            value="{{ $tipo['id'] }}" />
+                        <label class="form-check-label" for="{{ $tipo['nome'] }}">{{ ucwords($tipo['nome']) }}</label>
+                    </div>
+                @endforeach
                 @error('tipo')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
@@ -45,31 +44,14 @@
 
             <div class="mb-3">
                 <label class="form-label d-block">Settori di appartenenza</label>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="informatica" type="checkbox" name="settore_informatica"
-                        value="1" />
-                    <label class="form-check-label" for="informatica">Informatica</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="edilizia" type="checkbox" name="settore_edilizia"
-                        value="2" />
-                    <label class="form-check-label" for="edilizia">Edilizia</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="immobiliare" type="checkbox" name="settore_immobiliare"
-                        value="3" />
-                    <label class="form-check-label" for="immobiliare">Immobiliare</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="salute" type="checkbox" name="settore_salute"
-                        value="4" />
-                    <label class="form-check-label" for="salute">Salute</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="finanza" type="checkbox" name="settore_finanza"
-                        value="5" />
-                    <label class="form-check-label" for="finanza">Finanza</label>
-                </div>
+                @foreach ($settori as $settore)
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" id="{{ $settore['nome'] }}" type="checkbox"
+                            name="settore_{{ $settore['nome'] }}" value="{{ $settore['id'] }}" />
+                        <label class="form-check-label"
+                            for="{{ $settore['nome'] }}">{{ ucwords($settore['nome']) }}</label>
+                    </div>
+                @endforeach
 
             </div>
 
@@ -102,8 +84,8 @@
 
             <div class="mb-3">
                 <label class="form-label" for="rating">Rating</label>
-                <input class="form-control" id="rating" type="number" name="rating" min="0"
-                    max="10" value="{{ old('rating', 0) }}" />
+                <input class="form-control" id="rating" type="number" name="rating" min="0" max="10"
+                    value="{{ old('rating', 0) }}" />
                 @error('rating')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror

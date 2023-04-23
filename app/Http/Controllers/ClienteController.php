@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\ClienteSettoriPivot;
-
+use App\Models\Settore;
+use App\Models\Tipo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -27,7 +28,11 @@ class ClienteController extends Controller {
      * Show the form for creating a new resource.
      */
     public function create() {
-        return view('clienti.create');
+        return view('clienti.create',
+            [
+                'settori' => Settore::all()->toArray(),
+                'tipi'    => Tipo::all()->toArray(),
+            ]);
     }
 
     /**
@@ -55,7 +60,7 @@ class ClienteController extends Controller {
             'telefono'            => 'required',
             'note'                => 'nullable',
             'rating'              => ['required', 'integer', 'between:0,10'],
-            'visura_camerale'     => [File::types(['pdf'])]
+            'visura_camerale'     => [File::types(['pdf'])],
         ]);
 
         //Format data array to create new cliente
@@ -82,12 +87,11 @@ class ClienteController extends Controller {
         }
 
         //Check if visura attachment is present
-        if($request->hasFile('visura_camerale')){
-            if(isset($formFields['visura_camerale'])){
+        if ($request->hasFile('visura_camerale')) {
+            if (isset($formFields['visura_camerale'])) {
                 $clienteFields['attach_visura_camerale'] = $request->file('visura_camerale')->store('visure_camerali');
             }
         }
-
 
         //Create cliente
         $cliente = Cliente::create($clienteFields);
