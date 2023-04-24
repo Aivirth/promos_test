@@ -135,7 +135,7 @@ class ClienteController extends Controller {
         //Create cliente - settore relationship
         ClienteSettoriPivot::insert($selectedSettori);
 
-        return redirect()->route('dashboard.home')->with('message', 'Utente creato con successo');
+        return redirect()->route('all_clienti')->with('message', 'Utente creato con successo');
     }
 
     /**
@@ -330,7 +330,7 @@ class ClienteController extends Controller {
         //Delete user
         $user->delete();
 
-        return redirect()->route('dashboard.home')
+        return redirect()->route('all_clienti')
         ->with('message', 'Utente Eliminato con successo');
     }
 }
