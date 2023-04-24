@@ -29,7 +29,9 @@
                                 <td>{{ $cliente['ragione_sociale'] }}</td>
                                 <td>{{ ucwords($cliente['tipo']['nome']) }}</td>
                                 <td>{{ $cliente['rating'] }}</td>
-                                <td><a href="{{route('summary_cliente', $cliente['user']['id'])}}">view</a> | edit | delete</td>
+                                <td>
+                                    <a href="{{route('summary_cliente', $cliente['user']['id'])}}">view</a> | <a href="{{route('edit_cliente', $cliente['user']['id'])}}">edit</a> | delete
+                                </td>
                             </tr>
                         @endforeach
 

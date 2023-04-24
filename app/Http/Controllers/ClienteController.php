@@ -68,10 +68,7 @@ class ClienteController extends Controller {
         //Add default required fields
         $clienteFields = [
             'ragione_sociale' => $formFields['ragione_sociale'],
-
             'tipi_id'         => (int) $formFields['tipo'],
-            
-
             'indirizzo'       => $formFields['indirizzo'],
             'inizio_attivita' => $formFields['inizio_attivita'],
             'piva'            => $formFields['partita_iva'],
@@ -97,7 +94,7 @@ class ClienteController extends Controller {
         $userFields = [
             'password' => Hash::make($formFields['password']),
             'username' => $formFields['username'],
-            'email'           => $formFields['email'],
+            'email'    => $formFields['email'],
         ];
 
         // dd($userFields);
@@ -163,7 +160,28 @@ class ClienteController extends Controller {
      * Show the form for editing the specified resource.
      */
     public function edit(string $id) {
-        //
+        $cliente = Cliente::where(
+            'user_id', '=', $id
+        )->with(['tipo', 'settori', 'user'])->first()->toArray();
+
+        if ($cliente) {
+
+            //Reformat settori to allow easier already checked value
+            $settoriReorderedById = [];
+            foreach ($cliente['settori'] as $settore) {
+                $settoriReorderedById[$settore['id']] = $settore;
+            }
+            $cliente['settori'] = $settoriReorderedById;
+            // dd($cliente);
+
+            return view('clienti.edit', [
+                'cliente' => $cliente,
+                'settori' => Settore::all()->toArray(),
+                'tipi'    => Tipo::all()->toArray(),
+            ]);
+        } else {
+            abort('404');
+        }
     }
 
     /**
