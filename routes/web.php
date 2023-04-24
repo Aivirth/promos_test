@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,3 +28,7 @@ Route::get('/cliente/{id}/edit', [ClienteController::class, 'edit'])->name('edit
 Route::put('/cliente/{id}/update', [ClienteController::class, 'update'])->name('update_cliente');
 Route::delete('/cliente/{id}/delete', [ClienteController::class, 'destroy'])->name('delete_cliente');
 Route::get('/cliente/{id}', [ClienteController::class, 'show'])->name('summary_cliente');
+
+
+Route::get('/login', [UserController::class, 'login'])->name('login');
+Route::post('/user/authenticate', [UserController::class, 'authenticate'])->name('authenticate');

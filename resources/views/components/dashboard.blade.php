@@ -18,7 +18,7 @@
 </head>
 
 <body>
-    <div class="">
+    {{-- <div class="">
         @if (Route::has('login'))
             <div class="">
                 @auth
@@ -32,7 +32,14 @@
                 @endauth
             </div>
         @endif
-    </div>
+    </div> --}}
+
+    {{-- <div>
+        @php
+            echo auth()->user();
+            echo auth()->user()->isAdmin();
+        @endphp
+    </div> --}}
 
     <div class="d-flex" id="wrapper">
         @include('../partials._sidebar')
