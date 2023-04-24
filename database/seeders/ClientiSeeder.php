@@ -28,16 +28,17 @@ class ClientiSeeder extends Seeder {
         ]);
 
         DB::table('clienti')->insert([
-            'username'        => 'test_client_2',
-            'ragione_sociale' => 'Privato test 1',
-            'email'           => 'client2@example.com',
-            'telefono'        => '5555 444444',
-            'piva'            => 'PXTNSF53T24L626Y ',
-            'cf'              => 'PXTNSF53T24L626Y ',
-            'indirizzo'       => 'Via Ipsum 147, pz',
-            'inizio_attivita' => '2020-06-15',
-            'tipi_id'         => 2,
-            'password'        => Hash::make('4321'),
+            'username'               => 'test_client_2',
+            'ragione_sociale'        => 'Privato test 1',
+            'email'                  => 'client2@example.com',
+            'telefono'               => '5555 444444',
+            'piva'                   => 'PXTNSF53T24L626Y ',
+            'cf'                     => 'PXTNSF53T24L626Y ',
+            'indirizzo'              => 'Via Ipsum 147, pz',
+            'inizio_attivita'        => '2020-06-15',
+            'tipi_id'                => 2,
+            'password'               => Hash::make('4321'),
+            'attach_visura_camerale' => 'visure_camerali/wiZxalZBbezS6rlvd5EdrQqVL12l07kkJwPT1Mze.pdf',
         ]);
     }
 }
