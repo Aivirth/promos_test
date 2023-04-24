@@ -1,11 +1,11 @@
 <x-dashboard>
-    {{-- @dd($cliente['settori']) --}}
+    {{-- @dd($cliente) --}}
     <div class="container px-5 my-5">
         <div class="row my-5">
             <h3 class="col col-8 fs-4 mb-4">Scheda Cliente: </h3>
-            <p>username: {{ $cliente['username'] }}</p>
+            <p>username: {{ $cliente['user']['username'] }}</p>
             <p>ragione sociale: {{ $cliente['ragione_sociale'] }}</p>
-            <p>email: {{ $cliente['email'] }}</p>
+            <p>email: {{ $cliente['user']['email'] }}</p>
             <p>telefono: {{ $cliente['telefono'] }}</p>
             <p>rating: {{ $cliente['rating'] }}</p>
             <p>codice fiscale: {{ $cliente['cf'] }}</p>

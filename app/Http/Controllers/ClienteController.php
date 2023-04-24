@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\ClienteSettoriPivot;
 use App\Models\Settore;
 use App\Models\Tipo;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -16,7 +17,7 @@ class ClienteController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
-        $clienti = Cliente::with(['tipo', 'settori'])->get()->toArray();
+        $clienti = Cliente::with(['tipo', 'settori', 'user'])->get()->toArray();
         return view('clienti.index',
             [
                 'clienti' => $clienti,
@@ -67,10 +68,10 @@ class ClienteController extends Controller {
         //Add default required fields
         $clienteFields = [
             'ragione_sociale' => $formFields['ragione_sociale'],
-            'password'        => Hash::make($formFields['password']),
+
             'tipi_id'         => (int) $formFields['tipo'],
-            'email'           => $formFields['email'],
-            'username'        => $formFields['username'],
+            
+
             'indirizzo'       => $formFields['indirizzo'],
             'inizio_attivita' => $formFields['inizio_attivita'],
             'piva'            => $formFields['partita_iva'],
@@ -92,6 +93,20 @@ class ClienteController extends Controller {
                 $clienteFields['attach_visura_camerale'] = $request->file('visura_camerale')->store('visure_camerali');
             }
         }
+
+        $userFields = [
+            'password' => Hash::make($formFields['password']),
+            'username' => $formFields['username'],
+            'email'           => $formFields['email'],
+        ];
+
+        // dd($userFields);
+
+        //create user
+        $user = User::create($userFields);
+
+        //Add user_id to cliente
+        $userFields['user_id'] = $user->id;
 
         //Create cliente
         $cliente = Cliente::create($clienteFields);
@@ -120,8 +135,7 @@ class ClienteController extends Controller {
         }
 
         //Create cliente - settore relationship
-        $clienteSettoriPivot = ClienteSettoriPivot::insert($selectedSettori);
-
+        ClienteSettoriPivot::insert($selectedSettori);
 
         return redirect()->route('dashboard.home')->with('message', 'Utente creato con successo');
     }
@@ -131,12 +145,14 @@ class ClienteController extends Controller {
      */
     public function show(string $id) {
 
+        $cliente = Cliente::where(
+            'user_id', '=', $id
+        )->with(['tipo', 'settori', 'user'])->get()->toArray();
 
-        $cliente = Cliente::where('id', '=', $id)->with(['tipo', 'settori'])->get()->toArray()[0];
-
+        // dd($cliente);
         if ($cliente) {
             return view('clienti.show', [
-                'cliente' => $cliente,
+                'cliente' => $cliente[0],
             ]);
         } else {
             abort('404');

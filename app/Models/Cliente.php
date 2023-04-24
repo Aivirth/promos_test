@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Cliente extends Model {
     use HasFactory;
@@ -11,11 +12,11 @@ class Cliente extends Model {
     protected $table = 'clienti';
 
     protected $fillable = [
-
+        'user_id',
         'ragione_sociale',
-        'password',
+        // 'password',
         'tipi_id',
-        'email',
+        // 'email',
         'username',
         'indirizzo',
         'inizio_attivita',
@@ -29,7 +30,7 @@ class Cliente extends Model {
     ];
 
     protected $hidden = [
-        'password',
+        // 'password',
         'created_at',
         'updated_at',
     ];
@@ -50,5 +51,9 @@ class Cliente extends Model {
             Tipo::class, 'id', 'tipi_id')
         ;
 
+    }
+
+    public function user(){
+        return $this->BelongsTo(User::class);
     }
 }
