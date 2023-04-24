@@ -22,10 +22,19 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label" for="password">Password</label>
-                <input class="form-control" id="password" name="password" type="text" placeholder="Password"
-                    value="{{ $cliente['user']['password'] ?? old('password') }}" />
+                <label class="form-label" for="password">Vecchia Password</label>
+                <input class="form-control" id="password" name="password" type="text" placeholder="Vecchia Password"
+                    value="{{ old('password') }}" />
                 @error('password')
+                    <p class="text-danger">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="new_password">Nuova Password</label>
+                <input class="form-control" id="new_password" name="new_password" type="text" placeholder="Nuova Password"
+                    value="{{ old('new_password') }}" />
+                @error('new_password')
                     <p class="text-danger">{{ $message }}</p>
                 @enderror
             </div>
@@ -124,6 +133,23 @@
 
             <div class="mb-3">
                 <label class="form-label" for="visura_camerale">Allegato visura camerale</label>
+
+                {{-- @unless (is_null($cliente['attach_visura_camerale']))
+                    <object type="application/pdf" width="100%" height="500px"
+                        data="{{ asset($cliente['attach_visura_camerale']) }}">
+                        <p>Browser embeding not possible, <a href="{{ asset($cliente['attach_visura_camerale']) }}">view
+                                the
+                                file</a> instead</p>
+                    </object>
+                @endunless --}}
+
+                @if (is_null($cliente['attach_visura_camerale']))
+                    <p class="text-underscored">Nessun allegato presente</p>
+                @else
+                    <p>File attualmente caricato : <a href="{{ asset($cliente['attach_visura_camerale']) }}"
+                            target="_blank">Visualizza</a></p>
+                @endif
+
                 <input class="form-control" id="visura_camerale" name="visura_camerale"type="file" />
                 @error('visura_camerale')
                     <p class="text-danger">{{ $message }}</p>
