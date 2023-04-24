@@ -9,6 +9,7 @@ use App\Models\Tipo;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 
@@ -309,6 +310,27 @@ class ClienteController extends Controller {
      * Remove the specified resource from storage.
      */
     public function destroy(string $id) {
-        //
+        //Get user to delete
+        $user = User::find($id);
+
+        $cliente = Cliente::where(
+            'user_id', '=', $user->id
+        )->first();
+
+        // dd($user, $cliente);
+
+        //Delete visura camerale
+        if(!is_null($cliente->visura_camerale)){
+            Storage::disk('local')->delete($cliente->visura_camerale);
+        }
+
+        //Delete Cliente
+        $cliente->delete();
+
+        //Delete user
+        $user->delete();
+
+        return redirect()->route('dashboard.home')
+        ->with('message', 'Utente Eliminato con successo');
     }
 }
