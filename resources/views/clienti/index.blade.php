@@ -30,17 +30,17 @@
                                 <td>{{ $cliente['ragione_sociale'] }}</td>
                                 <td class="text-center">{{ ucwords($cliente['tipo']['nome']) }}</td>
                                 <td class="text-center">{{ $cliente['rating'] }}</td>
-                                <td class="text-center"><a
-                                        href="{{ route('summary_cliente', $cliente['user']['id']) }}">view</a></td>
-                                <td class="text-center"><a
-                                        href="{{ route('edit_cliente', $cliente['user']['id']) }}">edit</a></td>
+                                <td class="text-center"><a class="btn btn-outline-info"
+                                        href="{{ route('summary_cliente', $cliente['user']['id']) }}">Visualizza</a></td>
+                                <td class="text-center"><a class="btn btn-outline-secondary"
+                                        href="{{ route('edit_cliente', $cliente['user']['id']) }}">Modifica</a></td>
                                 <td class="text-center">
                                     <form
                                         onsubmit="return confirm('Sei sicuro di voler eliminare {{ $cliente['ragione_sociale'] }} ?')"
                                         action="{{ route('delete_cliente', $cliente['user']['id']) }}" method="post">
                                         @csrf
                                         @method('DELETE')
-                                        <input type="submit" value="Delete" />
+                                        <input type="submit" class="btn btn-outline-danger" value="Delete" />
                                     </form>
                                 </td>
                             </tr>
