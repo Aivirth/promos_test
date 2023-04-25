@@ -6,17 +6,21 @@
         <a href="{{ route('home') }}"
             class="list-group-item list-group-item-action bg-transparent second-text {{ Route::currentRouteNamed('home') ? 'active' : '' }}">
             <i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
-        <a href="{{ route('all_clienti') }}"
-            class="list-group-item list-group-item-action bg-transparent second-text fw-bold {{ Route::currentRouteNamed('all_clienti') ? 'active' : '' }}">
-            <i class="fa-solid fa-users me-2"></i>Clienti</a>
-        <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
-            <i class="fa-solid fa-list-check me-2"></i></i>Settori</a>
-        <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
-            <i class="fa-solid fa-toggle-on me-2"></i></i>Tipi</a>
+        @if (Auth::user()->is_admin)
+            <a href="{{ route('all_clienti') }}"
+                class="list-group-item list-group-item-action bg-transparent second-text fw-bold {{ Route::currentRouteNamed('all_clienti') ? 'active' : '' }}">
+                <i class="fa-solid fa-users me-2"></i>Clienti</a>
+            <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
+                <i class="fa-solid fa-list-check me-2"></i></i>Settori</a>
+            <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
+                <i class="fa-solid fa-toggle-on me-2"></i></i>Tipi</a>
+        @endif
 
-
-        <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
-            <i class="fa-regular fa-pen-to-square me-2"></i>Anagrafica</a>
+        @if (!Auth::user()->is_admin)
+            <a href="{{ route('edit_cliente', Auth::user()->id) }}"
+                class="list-group-item list-group-item-action bg-transparent second-text fw-bold">
+                <i class="fa-regular fa-pen-to-square me-2"></i>Anagrafica</a>
+        @endif
 
 
         @auth

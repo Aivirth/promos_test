@@ -18,6 +18,8 @@ class ClienteController extends Controller {
      * Display a listing of the resource.
      */
     public function index() {
+
+        $this->isUserAdmin();
         $clienti = Cliente::with(['tipo', 'settori', 'user'])->get()->toArray();
         return view('clienti.index',
             [
@@ -30,6 +32,7 @@ class ClienteController extends Controller {
      * Show the form for creating a new resource.
      */
     public function create() {
+        $this->isUserAdmin();
         return view('clienti.create',
             [
                 'settori' => Settore::all()->toArray(),
@@ -43,6 +46,7 @@ class ClienteController extends Controller {
     public function store(Request $request) {
         //
         // dd($request->all());
+        $this->isUserAdmin();
         //todo: move to custom request validation class
         $formFields = $request->validate([
             'ragione_sociale'     => ['required', Rule::unique('clienti')],
@@ -143,6 +147,7 @@ class ClienteController extends Controller {
      */
     public function show(string $id) {
 
+        $this->isUserAuthorized($id);
         $cliente = Cliente::where(
             'user_id', '=', $id
         )->with(['tipo', 'settori', 'user'])->get()->toArray();
@@ -161,6 +166,7 @@ class ClienteController extends Controller {
      * Show the form for editing the specified resource.
      */
     public function edit(string $id) {
+        $this->isUserAuthorized($id);
         $cliente = Cliente::where(
             'user_id', '=', $id
         )->with(['tipo', 'settori', 'user'])->first()->toArray();
@@ -189,6 +195,7 @@ class ClienteController extends Controller {
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id) {
+        $this->isUserAuthorized($id);
         $formFields = $request->validate([
             'ragione_sociale'     => ['required'],
             'username'            => 'required',
@@ -310,6 +317,7 @@ class ClienteController extends Controller {
      * Remove the specified resource from storage.
      */
     public function destroy(string $id) {
+        $this->isUserAuthorized($id);
         //Get user to delete
         $user = User::find($id);
 

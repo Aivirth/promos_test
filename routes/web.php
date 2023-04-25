@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function(){
     return view('welcome', ['pageTitle' => 'Home']);
-})->name('home');
+})->name('home')->middleware('auth');
 
 Route::get('/clienti', [ClienteController::class, 'index'])->name('all_clienti')->middleware('auth');
 

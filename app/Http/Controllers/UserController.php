@@ -56,7 +56,7 @@ class UserController extends Controller {
 
         if (auth()->attempt($formFields)) {
             $request->session()->regenerate();
-            return redirect()->route('all_clienti')->with('message', 'Benvenuto ' . auth()->user()->username . '!');
+            return redirect()->route('home')->with('message', 'Benvenuto ' . auth()->user()->username . '!');
 
         }
 
