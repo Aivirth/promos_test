@@ -272,13 +272,15 @@ class ClienteController extends Controller {
 
         // dd($user->id, $cliente->ragione_sociale);
         // dd($cliente->get()->toArray());
-
         //Update user
         $user->update($userFields);
 
+        
         //Delete older attachment file from storage
-        if (!is_null($cliente->visura_camerale)) {
-            Storage::disk('local')->delete($cliente->visura_camerale);
+        if ($request->hasFile('visura_camerale')) {
+            if (!is_null($cliente->attach_visura_camerale)) {
+                Storage::disk('local')->delete($cliente->attach_visura_camerale);
+            }
         }
 
         //Update cliente
@@ -336,8 +338,8 @@ class ClienteController extends Controller {
         // dd($user, $cliente);
 
         //Delete visura camerale
-        if (!is_null($cliente->visura_camerale)) {
-            Storage::disk('local')->delete($cliente->visura_camerale);
+        if (!is_null($cliente->attach_visura_camerale)) {
+            Storage::disk('local')->delete($cliente->attach_visura_camerale);
         }
 
         //Delete Cliente
