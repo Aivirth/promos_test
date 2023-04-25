@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -45,5 +47,25 @@ class User extends Authenticatable {
 
     public function isAdmin() {
         return $this->is_admin;
+    }
+
+
+    public function scopeSearch($query, array $filters) {
+        if ($filters['search_cliente'] ?? false) {
+            $search = $filters['search_cliente'];
+            $query->where(
+                'email', 'like', '%' . $search . '%'
+            )->orWhere(
+                'username', 'like', '%' . $search . '%'
+            );
+        }
+    }
+
+    public function scopeSearchFromCliente(Builder $query, string $search){
+        return $query->where(
+            'email', 'like', '%' . $search . '%'
+        )->orWhere(
+            'username', 'like', '%' . $search . '%'
+        );
     }
 }

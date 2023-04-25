@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -25,7 +26,7 @@ class Cliente extends Model {
         'note',
         'cf',
         'rating',
-        'attach_visura_camerale'
+        'attach_visura_camerale',
 
     ];
 
@@ -53,7 +54,18 @@ class Cliente extends Model {
 
     }
 
-    public function user(){
+    public function user() {
         return $this->BelongsTo(User::class);
+    }
+
+    public function scopeSearch(Builder $query, array $filters) {
+        if ($filters['search_cliente'] ?? false) {
+            $search = $filters['search_cliente'];
+            $query->with('user')->whereHas('user', function( Builder $q) use ($search){
+                $q->searchFromCliente($search);
+            })->orWhere(
+                'ragione_sociale', 'like', '%' . $search . '%'
+            );
+        }
     }
 }

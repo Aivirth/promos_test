@@ -4,12 +4,15 @@
         <div class="col col-12">
             <x-flash-message-success />
         </div>
-        <h3 class="col col-8 fs-4 mb-4">Lista clienti</h3>
-        <div class="col col-4 mb-4 d-flex justify-content-end">
+        <h3 class="col col-5 fs-4 mb-4">Lista clienti</h3>
+        <div class="col">
+            @include('../partials._clients_search')
+        </div>
+        <div class="col col-2 mb-4 d-flex justify-content-end">
             <a href="{{ route('crea_utente') }}" class="btn btn-success " tabindex="-1" role="button">Aggiungi nuovo
                 cliente</a>
         </div>
-        <div class="col">
+        <div class="col col-12">
             <table class="table bg-white rounded shadow-sm  table-hover">
                 <thead>
                     <tr>
