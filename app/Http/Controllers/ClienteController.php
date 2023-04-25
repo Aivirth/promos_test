@@ -20,7 +20,9 @@ class ClienteController extends Controller {
     public function index() {
 
         $this->isUserAdmin();
-        $clienti = Cliente::with(['tipo', 'settori', 'user'])->search(request(['search_cliente']))->get()->toArray();
+        $clienti = Cliente::with(['tipo', 'settori', 'user'])
+        ->search(request(['search_cliente']))
+        ->paginate(10);
         return view('clienti.index',
             [
                 'clienti' => $clienti,

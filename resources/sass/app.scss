@@ -8,3 +8,8 @@
 @import 'bootstrap/scss/bootstrap';
 
 @import 'dashboard';
+
+.pagination {
+  --bs-pagination-active-bg: var(--bs-success);
+  --bs-pagination-active-border-color: var(--bs-success);
+}
