@@ -3,8 +3,8 @@
         <i class="fas fa-user-secret me-2"></i>PromosTest
     </div>
     <div class="list-group list-group-flush my-3">
-        <a href="{{ route('all_clienti') }}"
-            class="list-group-item list-group-item-action bg-transparent second-text {{ Route::currentRouteNamed('all_clienti') ? 'active' : '' }}">
+        <a href="{{ route('home') }}"
+            class="list-group-item list-group-item-action bg-transparent second-text {{ Route::currentRouteNamed('home') ? 'active' : '' }}">
             <i class="fa-solid fa-chart-line me-2"></i>Dashboard</a>
         <a href="{{ route('all_clienti') }}"
             class="list-group-item list-group-item-action bg-transparent second-text fw-bold {{ Route::currentRouteNamed('all_clienti') ? 'active' : '' }}">

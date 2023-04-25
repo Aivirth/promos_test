@@ -19,10 +19,14 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('/', [ClienteController::class, 'index'])->name('all_clienti');
+Route::get('/', function(){
+    return view('welcome', ['pageTitle' => 'Home']);
+})->name('home');
+
+Route::get('/clienti', [ClienteController::class, 'index'])->name('all_clienti');
 
 Route::get('/cliente/create', [ClienteController::class, 'create'])->name('crea_utente');
-Route::post('/cliente', [ClienteController::class, 'store'])->name('store_cliente');
+Route::post('/cliente/add', [ClienteController::class, 'store'])->name('store_cliente');
 
 Route::get('/cliente/{id}/edit', [ClienteController::class, 'edit'])->name('edit_cliente');
 Route::put('/cliente/{id}/update', [ClienteController::class, 'update'])->name('update_cliente');
