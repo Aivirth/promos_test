@@ -166,7 +166,7 @@
             </div>
 
             <div class="d-grid">
-                <button class="btn btn-primary btn-lg" id="submit_new_cliente" type="submit">Crea</button>
+                <button class="btn btn-primary btn-lg" id="submit_new_cliente" type="submit">Aggiorna</button>
             </div>
 
         </form>

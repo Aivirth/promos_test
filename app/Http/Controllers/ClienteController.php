@@ -199,8 +199,8 @@ class ClienteController extends Controller {
         $formFields = $request->validate([
             'ragione_sociale'     => ['required'],
             'username'            => 'required',
-            'old_password'        => ['nullable','string'],
-            'new_password'        => ['nullable','string'],
+            'old_password'        => ['nullable', 'string'],
+            'new_password'        => ['nullable', 'string'],
             'tipo'                => 'required',
             'email'               => ['required', 'email'],
             'settore_informatica' => 'nullable',
@@ -258,11 +258,13 @@ class ClienteController extends Controller {
         $user = User::find($id);
 
         //Check if old password is correct
-        if (Hash::check($formFields['old_password'], $user->password)) {
-            //update password
-            $userFields['password'] = Hash::make($formFields['new_password']);
-        }else{
-            $responseWarnings[] = 'Password non aggiornata in quanto non combacia con la attuale';
+        if (trim($formFields['old_password']) != '') {
+            if (Hash::check($formFields['old_password'], $user->password)) {
+                //update password
+                $userFields['password'] = Hash::make($formFields['new_password']);
+            } else {
+                $responseWarnings[] = 'Password non aggiornata in quanto non combacia con la attuale';
+            }
         }
 
         //Get Cliente to update
@@ -273,6 +275,12 @@ class ClienteController extends Controller {
 
         //Update user
         $user->update($userFields);
+
+        //Delete older attachment file from storage
+        if (!is_null($cliente->visura_camerale)) {
+            Storage::disk('local')->delete($cliente->visura_camerale);
+        }
+
         //Update cliente
         $cliente->update($clienteFields);
 
@@ -309,8 +317,8 @@ class ClienteController extends Controller {
         ClienteSettoriPivot::insert($selectedSettori);
 
         return redirect()->route('edit_cliente', ['id' => $user->id])
-        ->with('message', 'Utente modificato con successo')
-        ->with('warnings', $responseWarnings);
+            ->with('message', 'Utente modificato con successo')
+            ->with('warnings', $responseWarnings);
     }
 
     /**
@@ -328,7 +336,7 @@ class ClienteController extends Controller {
         // dd($user, $cliente);
 
         //Delete visura camerale
-        if(!is_null($cliente->visura_camerale)){
+        if (!is_null($cliente->visura_camerale)) {
             Storage::disk('local')->delete($cliente->visura_camerale);
         }
 
@@ -339,6 +347,6 @@ class ClienteController extends Controller {
         $user->delete();
 
         return redirect()->route('all_clienti')
-        ->with('message', 'Utente Eliminato con successo');
+            ->with('message', 'Utente Eliminato con successo');
     }
 }
