@@ -13,3 +13,7 @@
   --bs-pagination-active-bg: var(--bs-success);
   --bs-pagination-active-border-color: var(--bs-success);
 }
+
+.settori_show_list >.list-group-item{
+    color: var(--bs-body-color);
+}

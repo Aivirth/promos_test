@@ -2,6 +2,7 @@
     {{-- @dd($cliente, $settori, $tipi) --}}
     <div class="container px-5 my-5">
         <x-flash-message-warning />
+        <x-flash-message-success />
         <form id="contactForm" method="POST" action="{{ route('update_cliente', $cliente['user']['id']) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')

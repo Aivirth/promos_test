@@ -68,7 +68,7 @@
 
                 <tr>
                     <th scope="row">Tipo</th>
-                    <td>{{ $cliente['tipo']['nome'] }}</td>
+                    <td>{{ ucwords($cliente['tipo']['nome']) }}</td>
                 </tr>
 
                 <tr>
@@ -78,11 +78,11 @@
                 <tr>
                     <th scope="row">Settori</th>
                     <td>
-                        <ul class="list-group list-group-flush">
+                        <ul class="list-group list-group-flush settori_show_list">
                             @unless (count($cliente['settori']) == 0)
                                 @foreach ($cliente['settori'] as $settore)
-                                    <li class="list-group-item ms-0 ps-0 pt-0">
-                                        {{ $settore['nome'] }}
+                                    <li class="list-group-item ms-0 ps-0 pt-0 pb-1">
+                                        {{ ucwords($settore['nome']) }}
                                     </li>
                                 @endforeach
                             @endunless
