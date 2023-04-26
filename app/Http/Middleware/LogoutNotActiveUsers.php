@@ -19,7 +19,7 @@ class LogoutNotActiveUsers
         $user = Auth::user();
         if($user && !$user->is_active){
             Auth::logout();
-            return redirect()->route('login');
+            return redirect()->route('login')->with('not_active', 'Utente non attivo');
         }
         return $next($request);
     }
