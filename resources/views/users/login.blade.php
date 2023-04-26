@@ -1,6 +1,14 @@
 <x-base>
     <div class="vh-100 d-flex justify-content-center align-items-center">
         <div class="container">
+            @if (session()->has('not_active'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div>
+                        {{ session('not_active') }}
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             <div class="row d-flex justify-content-center">
                 <div class="col-12 col-md-8 col-lg-6">
                     <div class="border border-3 border-success"></div>

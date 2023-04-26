@@ -38,7 +38,7 @@ class UserController extends Controller {
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/')->with('message', 'Hai effettuato il logout');
+        return redirect('login')->with('message', 'Hai effettuato il logout');
 
     }
 
@@ -51,13 +51,14 @@ class UserController extends Controller {
     public function authenticate(Request $request) {
         $formFields = $request->validate([
             'email'    => ['required', 'email'],
-            'password' => 'required',
+            'password' => 'required'
         ]);
+
+        $formFields['is_active'] = 1;
 
         if (auth()->attempt($formFields)) {
             $request->session()->regenerate();
             return redirect()->route('home')->with('message', 'Benvenuto ' . auth()->user()->username . '!');
-
         }
 
         return back()->withErrors(['email' => 'Credenziali non valide'])->onlyInput('email');

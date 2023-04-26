@@ -36,4 +36,5 @@ class Controller extends BaseController {
         abort(403, 'Utente non autorizzato');
 
     }
+
 }

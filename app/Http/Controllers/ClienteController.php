@@ -14,6 +14,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
 
 class ClienteController extends Controller {
+
     /**
      * Display a listing of the resource.
      */
@@ -21,8 +22,8 @@ class ClienteController extends Controller {
 
         $this->isUserAdmin();
         $clienti = Cliente::with(['tipo', 'settori', 'user'])
-        ->search(request(['search_cliente']))
-        ->paginate(10);
+            ->search(request(['search_cliente']))
+            ->paginate(10);
         return view('clienti.index',
             [
                 'clienti' => $clienti,
@@ -34,6 +35,7 @@ class ClienteController extends Controller {
      * Show the form for creating a new resource.
      */
     public function create() {
+
         $this->isUserAdmin();
         return view('clienti.create',
             [
@@ -46,8 +48,7 @@ class ClienteController extends Controller {
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
-        //
-        // dd($request->all());
+
         $this->isUserAdmin();
         //todo: move to custom request validation class
         $formFields = $request->validate([
@@ -168,6 +169,7 @@ class ClienteController extends Controller {
      * Show the form for editing the specified resource.
      */
     public function edit(string $id) {
+
         $this->isUserAuthorized($id);
         $cliente = Cliente::where(
             'user_id', '=', $id
@@ -197,6 +199,7 @@ class ClienteController extends Controller {
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id) {
+
         $this->isUserAuthorized($id);
         $formFields = $request->validate([
             'ragione_sociale'     => ['required'],
@@ -277,7 +280,6 @@ class ClienteController extends Controller {
         //Update user
         $user->update($userFields);
 
-        
         //Delete older attachment file from storage
         if ($request->hasFile('visura_camerale')) {
             if (!is_null($cliente->attach_visura_camerale)) {
@@ -329,6 +331,7 @@ class ClienteController extends Controller {
      * Remove the specified resource from storage.
      */
     public function destroy(string $id) {
+
         $this->isUserAuthorized($id);
         //Get user to delete
         $user = User::find($id);

@@ -49,6 +49,10 @@ class User extends Authenticatable {
         return $this->is_admin;
     }
 
+    public function isActive() {
+        return $this->is_active;
+    }
+
 
     public function scopeSearch($query, array $filters) {
         if ($filters['search_cliente'] ?? false) {
