@@ -50,7 +50,7 @@ class UserController extends Controller {
     // Authenticate User
     public function authenticate(Request $request) {
         $formFields = $request->validate([
-            'email'    => ['required', 'email'],
+            'email'    => ['required', 'email', 'min:5'],
             'password' => 'required'
         ]);
 

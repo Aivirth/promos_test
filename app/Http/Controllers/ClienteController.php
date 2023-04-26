@@ -53,10 +53,10 @@ class ClienteController extends Controller {
         //todo: move to custom request validation class
         $formFields = $request->validate([
             'ragione_sociale'     => ['required', Rule::unique('clienti')],
-            'username'            => 'required',
-            'password'            => 'required',
+            'username'            => ['required', Rule::unique('users')],
+            'password'            => ['required', 'min:5'],
             'tipo'                => 'required',
-            'email'               => ['required', 'email'],
+            'email'               => ['required', 'email', Rule::unique('users')],
             'settore_informatica' => 'nullable',
             'settore_immobiliare' => 'nullable',
             'settore_edilizia'    => 'nullable',
@@ -64,9 +64,9 @@ class ClienteController extends Controller {
             'settore_finanza'     => 'nullable',
             'indirizzo'           => 'required',
             'inizio_attivita'     => 'required',
-            'partita_iva'         => 'required',
-            'codice_fiscale'      => 'nullable',
-            'telefono'            => 'required',
+            'partita_iva'         => ['required', Rule::unique('clienti', 'piva')],
+            'codice_fiscale'      => ['nullable', Rule::unique('clienti' , 'cf')],
+            'telefono'            => ['required', Rule::unique('clienti')],
             'note'                => 'nullable',
             'rating'              => ['required', 'integer', 'between:0,10'],
             'visura_camerale'     => [File::types(['pdf'])],
@@ -111,7 +111,7 @@ class ClienteController extends Controller {
         $user = User::create($userFields);
 
         //Add user_id to cliente
-        $userFields['user_id'] = $user->id;
+        $clienteFields['user_id'] = $user->id;
 
         //Create cliente
         $cliente = Cliente::create($clienteFields);
@@ -202,12 +202,12 @@ class ClienteController extends Controller {
 
         $this->isUserAuthorized($id);
         $formFields = $request->validate([
-            'ragione_sociale'     => ['required'],
-            'username'            => 'required',
-            'old_password'        => ['nullable', 'string'],
-            'new_password'        => ['nullable', 'string'],
+            'ragione_sociale'     => ['required', Rule::unique('clienti')],
+            'username'            => ['required', Rule::unique('users')],
+            'old_password'        => ['nullable', 'string', 'min:5'],
+            'new_password'        => ['nullable', 'string', 'min:5'],
             'tipo'                => 'required',
-            'email'               => ['required', 'email'],
+            'email'               => ['required', 'email', Rule::unique('users')],
             'settore_informatica' => 'nullable',
             'settore_immobiliare' => 'nullable',
             'settore_edilizia'    => 'nullable',
@@ -215,9 +215,9 @@ class ClienteController extends Controller {
             'settore_finanza'     => 'nullable',
             'indirizzo'           => 'required',
             'inizio_attivita'     => 'required',
-            'partita_iva'         => 'required',
-            'codice_fiscale'      => 'nullable',
-            'telefono'            => 'required',
+            'partita_iva'         => ['required',Rule::unique('clienti', 'piva')],
+            'codice_fiscale'      => ['nullable',Rule::unique('clienti' , 'cf')],
+            'telefono'            => ['required', Rule::unique('clienti')],
             'note'                => 'nullable',
             'rating'              => ['required', 'integer', 'between:0,10'],
             'visura_camerale'     => [File::types(['pdf'])],
