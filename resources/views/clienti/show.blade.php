@@ -4,6 +4,10 @@
         <div class="row">
             <h3 class="col col-8 fs-4 mb-4">Scheda Cliente</h3>
             <div class="col col-4 mb-4 d-flex justify-content-end">
+                @if (Auth::user()->is_admin)
+                    <a href="{{ route('all_clienti') }}"
+                        class="btn btn-outline-secondary me-2">Indietro</a>
+                @endif
                 <a href="{{ route('edit_cliente', $cliente['user']['id']) }}" class="btn btn-success" tabindex="-1"
                     role="button">Modifica</a>
             </div>
@@ -95,7 +99,7 @@
         </table>
 
 
-        <hr/>
+        <hr />
         @unless (is_null($cliente['attach_visura_camerale']))
             <object type="application/pdf" width="100%" height="500px"
                 data="{{ asset($cliente['attach_visura_camerale']) }}">

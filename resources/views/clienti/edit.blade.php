@@ -3,6 +3,11 @@
     <div class="container px-5 my-5">
         <x-flash-message-warning />
         <x-flash-message-success />
+        @if (Auth::user()->is_admin)
+            <div class="mb-4">
+                <a href="{{route('summary_cliente', $cliente['user']['id'])}}" class="btn btn-outline-secondary">Indietro</a>
+            </div>
+        @endif
         <form id="contactForm" method="POST" action="{{ route('update_cliente', $cliente['user']['id']) }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
