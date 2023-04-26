@@ -26,6 +26,7 @@
                 <tbody>
                     @unless (count($clienti) == 0)
                         @foreach ($clienti as $cliente)
+                            @if(!is_null($cliente->user))
                             <tr>
                                 <th scope="row" class="text-center">{{ $cliente->user->id }}</th>
                                 <td>{{ $cliente->ragione_sociale }}</td>
@@ -45,6 +46,7 @@
                                     </form>
                                 </td>
                             </tr>
+                            @endif
                         @endforeach
                     @endunless
                 </tbody>

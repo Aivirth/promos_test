@@ -65,7 +65,7 @@ class ClienteController extends Controller {
             'indirizzo'           => 'required',
             'inizio_attivita'     => 'required',
             'partita_iva'         => ['required', Rule::unique('clienti', 'piva')],
-            'codice_fiscale'      => ['nullable', Rule::unique('clienti' , 'cf')],
+            'codice_fiscale'      => ['nullable', Rule::unique('clienti', 'cf')],
             'telefono'            => ['required', Rule::unique('clienti')],
             'note'                => 'nullable',
             'rating'              => ['required', 'integer', 'between:0,10'],
@@ -107,42 +107,46 @@ class ClienteController extends Controller {
 
         // dd($userFields);
 
-        //create user
-        $user = User::create($userFields);
+        try {
+            //create user
+            $user = User::create($userFields);
 
-        //Add user_id to cliente
-        $clienteFields['user_id'] = $user->id;
+            //Add user_id to cliente
+            $clienteFields['user_id'] = $user->id;
 
-        //Create cliente
-        $cliente = Cliente::create($clienteFields);
+            //Create cliente
+            $cliente = Cliente::create($clienteFields);
 
-        //Run checks on selected settori
-        $selectedSettori = [];
+            //Run checks on selected settori
+            $selectedSettori = [];
 
-        $settoriWhitelist = [
-            'settore_informatica',
-            'settore_immobiliare',
-            'settore_edilizia',
-            'settore_salute',
-            'settore_finanza',
-        ];
+            $settoriWhitelist = [
+                'settore_informatica',
+                'settore_immobiliare',
+                'settore_edilizia',
+                'settore_salute',
+                'settore_finanza',
+            ];
 
-        foreach ($settoriWhitelist as $settore) {
+            foreach ($settoriWhitelist as $settore) {
 
-            if (isset($formFields[$settore])) {
-                ('clienti_id');
-                ('settori_id');
-                $selectedSettori[] = [
-                    'clienti_id' => $cliente->id,
-                    'settori_id' => (int) $formFields[$settore],
-                ];
+                if (isset($formFields[$settore])) {
+                    ('clienti_id');
+                    ('settori_id');
+                    $selectedSettori[] = [
+                        'clienti_id' => $cliente->id,
+                        'settori_id' => (int) $formFields[$settore],
+                    ];
+                }
             }
+
+            //Create cliente - settore relationship
+            ClienteSettoriPivot::insert($selectedSettori);
+
+            return redirect()->route('all_clienti')->with('message', 'Utente creato con successo');
+        } catch (\Exception$e) {
+            return redirect()->route('all_clienti')->with('fatal', $e->getMessage());
         }
-
-        //Create cliente - settore relationship
-        ClienteSettoriPivot::insert($selectedSettori);
-
-        return redirect()->route('all_clienti')->with('message', 'Utente creato con successo');
     }
 
     /**
@@ -202,12 +206,12 @@ class ClienteController extends Controller {
 
         $this->isUserAuthorized($id);
         $formFields = $request->validate([
-            'ragione_sociale'     => ['required', Rule::unique('clienti')],
-            'username'            => ['required', Rule::unique('users')],
+            'ragione_sociale'     => ['required'],
+            'username'            => ['required'],
             'old_password'        => ['nullable', 'string', 'min:5'],
             'new_password'        => ['nullable', 'string', 'min:5'],
             'tipo'                => 'required',
-            'email'               => ['required', 'email', Rule::unique('users')],
+            'email'               => ['required', 'email'],
             'settore_informatica' => 'nullable',
             'settore_immobiliare' => 'nullable',
             'settore_edilizia'    => 'nullable',
@@ -215,9 +219,9 @@ class ClienteController extends Controller {
             'settore_finanza'     => 'nullable',
             'indirizzo'           => 'required',
             'inizio_attivita'     => 'required',
-            'partita_iva'         => ['required',Rule::unique('clienti', 'piva')],
-            'codice_fiscale'      => ['nullable',Rule::unique('clienti' , 'cf')],
-            'telefono'            => ['required', Rule::unique('clienti')],
+            'partita_iva'         => ['required'],
+            'codice_fiscale'      => ['nullable'],
+            'telefono'            => ['required'],
             'note'                => 'nullable',
             'rating'              => ['required', 'integer', 'between:0,10'],
             'visura_camerale'     => [File::types(['pdf'])],
@@ -248,83 +252,88 @@ class ClienteController extends Controller {
             $clienteFields['cf'] = $formFields['codice_fiscale'];
         }
 
-        //Check if visura attachment is present
-        if ($request->hasFile('visura_camerale')) {
-            if (isset($formFields['visura_camerale'])) {
-                $clienteFields['attach_visura_camerale'] = $request->file('visura_camerale')->store('visure_camerali');
+        try {
+            //Check if visura attachment is present
+            if ($request->hasFile('visura_camerale')) {
+                if (isset($formFields['visura_camerale'])) {
+                    $clienteFields['attach_visura_camerale'] = $request->file('visura_camerale')->store('visure_camerali');
+                }
             }
+
+            $userFields = [
+                'username' => $formFields['username'],
+                'email'    => $formFields['email'],
+            ];
+            //Get user to update
+            $user = User::find($id);
+
+            //Check if old password is correct
+            if (trim($formFields['old_password']) != '') {
+                if (Hash::check($formFields['old_password'], $user->password)) {
+                    //update password
+                    $userFields['password'] = Hash::make($formFields['new_password']);
+                } else {
+                    $responseWarnings[] = 'Password non aggiornata in quanto non combacia con la attuale';
+                }
+            }
+
+            //Get Cliente to update
+            $cliente = Cliente::where('user_id', '=', $user->id)->first();
+
+            // dd($user->id, $cliente->ragione_sociale);
+            // dd($cliente->get()->toArray());
+            //Update user
+            $user->update($userFields);
+
+            //Delete older attachment file from storage
+            if ($request->hasFile('visura_camerale')) {
+                if (!is_null($cliente->attach_visura_camerale)) {
+                    Storage::disk('local')->delete($cliente->attach_visura_camerale);
+                }
+            }
+
+            //Update cliente
+            $cliente->update($clienteFields);
+
+            //Run checks on selected settori
+            $selectedSettori = [];
+
+            $settoriWhitelist = [
+                'settore_informatica',
+                'settore_immobiliare',
+                'settore_edilizia',
+                'settore_salute',
+                'settore_finanza',
+            ];
+
+            foreach ($settoriWhitelist as $settore) {
+
+                if (isset($formFields[$settore])) {
+                    ('clienti_id');
+                    ('settori_id');
+                    $selectedSettori[] = [
+                        'clienti_id' => $cliente->id,
+                        'settori_id' => (int) $formFields[$settore],
+                    ];
+                }
+            }
+
+            //Get all ClienteSettoriPivot
+            $clientiSettoriPivots = ClienteSettoriPivot::where('clienti_id', '=', $cliente->id);
+
+            //Delete all current relationships
+            $clientiSettoriPivots->delete();
+
+            //Recreate cliente - settore relationship
+            ClienteSettoriPivot::insert($selectedSettori);
+
+            return redirect()->route('edit_cliente', ['id' => $user->id])
+                ->with('message', 'Utente modificato con successo')
+                ->with('warnings', $responseWarnings);
+        } catch (\Exception$e) {
+            redirect()->route('edit_cliente', ['id' => $user->id])->with('fatal', $e->getMessage());
         }
 
-        $userFields = [
-            'username' => $formFields['username'],
-            'email'    => $formFields['email'],
-        ];
-        //Get user to update
-        $user = User::find($id);
-
-        //Check if old password is correct
-        if (trim($formFields['old_password']) != '') {
-            if (Hash::check($formFields['old_password'], $user->password)) {
-                //update password
-                $userFields['password'] = Hash::make($formFields['new_password']);
-            } else {
-                $responseWarnings[] = 'Password non aggiornata in quanto non combacia con la attuale';
-            }
-        }
-
-        //Get Cliente to update
-        $cliente = Cliente::where('user_id', '=', $user->id)->first();
-
-        // dd($user->id, $cliente->ragione_sociale);
-        // dd($cliente->get()->toArray());
-        //Update user
-        $user->update($userFields);
-
-        //Delete older attachment file from storage
-        if ($request->hasFile('visura_camerale')) {
-            if (!is_null($cliente->attach_visura_camerale)) {
-                Storage::disk('local')->delete($cliente->attach_visura_camerale);
-            }
-        }
-
-        //Update cliente
-        $cliente->update($clienteFields);
-
-        //Run checks on selected settori
-        $selectedSettori = [];
-
-        $settoriWhitelist = [
-            'settore_informatica',
-            'settore_immobiliare',
-            'settore_edilizia',
-            'settore_salute',
-            'settore_finanza',
-        ];
-
-        foreach ($settoriWhitelist as $settore) {
-
-            if (isset($formFields[$settore])) {
-                ('clienti_id');
-                ('settori_id');
-                $selectedSettori[] = [
-                    'clienti_id' => $cliente->id,
-                    'settori_id' => (int) $formFields[$settore],
-                ];
-            }
-        }
-
-        //Get all ClienteSettoriPivot
-        $clientiSettoriPivots = ClienteSettoriPivot::where('clienti_id', '=', $cliente->id);
-
-        //Delete all current relationships
-        $clientiSettoriPivots->delete();
-
-        //Recreate cliente - settore relationship
-        ClienteSettoriPivot::insert($selectedSettori);
-
-        return redirect()->route('edit_cliente', ['id' => $user->id])
-            ->with('message', 'Utente modificato con successo')
-            ->with('warnings', $responseWarnings);
     }
 
     /**
